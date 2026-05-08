@@ -60,13 +60,7 @@ async function loadCities() {
     const response = await fetch('/api/cities');
     const cities = await response.json();
     const citySelect = document.getElementById('citySelect');
-    citySelect.innerHTML = '<option value="">Выберите город</option>';
-    cities.forEach(city => {
-        const option = document.createElement('option');
-        option.value = city.name;
-        option.textContent = city.name;
-        citySelect.appendChild(option);
-    });
+    citySelect.innerHTML = '<option value="Находка">Находка</option>';
     citySelect.value = 'Находка';
     await loadDistricts();
     await loadClubs();
@@ -75,13 +69,13 @@ async function loadCities() {
 async function loadDistricts() {
     const city = document.getElementById('citySelect').value;
     if (!city) {
-        document.getElementById('districtFilter').innerHTML = '<option value="">Выберите район</option>';
+        document.getElementById('districtFilter').innerHTML = '<option value=""></option>';
         return;
     }
     const response = await fetch(`/api/districts?city=${encodeURIComponent(city)}`);
     const data = await response.json();
     const districtSelect = document.getElementById('districtFilter');
-    districtSelect.innerHTML = '<option value="">Выберите район</option>';
+    districtSelect.innerHTML = '<option value=""></option>';
     if (data.districts) {
         data.districts.forEach(district => {
             const option = document.createElement('option');
@@ -137,8 +131,8 @@ async function loadClubs() {
     let params = new URLSearchParams();
     
     if (city && city !== '') params.append('city', city);
-    if (district && district !== '' && district !== 'Выберите район') params.append('district', district);
-    if (type && type !== '' && type !== 'Выберите тип кружка') params.append('type', type);
+    if (district && district !== '') params.append('district', district);
+    if (type && type !== '') params.append('type', type);
     if (freeOnly) params.append('free', 'true');
     
     let age = null;
@@ -259,7 +253,6 @@ async function openEditModal(clubId) {
     document.getElementById('editClubSchedule').value = club.schedule;
     document.getElementById('deleteClubBtn').style.display = 'block';
     
-    // Загружаем города
     const citiesResponse = await fetch('/api/cities');
     const cities = await citiesResponse.json();
     const citySelect = document.getElementById('editClubCity');
@@ -278,7 +271,7 @@ async function openEditModal(clubId) {
     const districtsResponse = await fetch(`/api/districts?city=${encodeURIComponent(club.city)}`);
     const districtsData = await districtsResponse.json();
     const districtSelect = document.getElementById('editClubDistrict');
-    districtSelect.innerHTML = '<option value=""></option>';
+    districtSelect.innerHTML = '<option value="">Выберите район</option>';
     
     if (districtsData.districts) {
         for (const district of districtsData.districts) {
@@ -640,30 +633,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('districtFilter').addEventListener('change', loadClubs);
     document.getElementById('typeFilter').addEventListener('change', loadClubs);
     document.getElementById('freeOnly').addEventListener('change', loadClubs);
-    
-    document.getElementById('calcAgeBtn').addEventListener('click', () => {
-        const birthDate = document.getElementById('birthDate').value;
-        const ageYear = document.getElementById('ageYear').value;
-        let age = null;
-        
-        if (birthDate) {
-            const today = new Date();
-            const birth = new Date(birthDate);
-            age = today.getFullYear() - birth.getFullYear();
-            const monthDiff = today.getMonth() - birth.getMonth();
-            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) age--;
-        } else if (ageYear) {
-            age = new Date().getFullYear() - parseInt(ageYear);
-        }
-        
-        if (age && age >= 3 && age <= 17) {
-            loadClubs();
-        } else if (age) {
-            alert('Возраст должен быть от 3 до 17 лет');
-        } else {
-            alert('Введите дату рождения или год рождения');
-        }
-    });
     
     document.getElementById('resetFiltersBtn').addEventListener('click', () => {
         document.getElementById('birthDate').value = '';

@@ -9,28 +9,19 @@
 </head>
 <body>
 <div class="top-bar">
-    <div class="city-selector">
-        <span>Город:</span>
-        <select id="citySelect">
-            <option value="">Выберите город</option>
-        </select>
-    </div>
     <div class="title-wrapper">
         <h1 id="mainTitle">Карта детства</h1>
         <p id="mainSubtitle" class="subtitle">Найти кружок для ребенка</p>
     </div>
-    <button id="adminBtn" class="admin-btn">Админ-панель</button>
 </div>
 
 <div id="filtersContainer" class="filters-container">
     <div class="filter-row">
         <div class="filter-item">
-            <label>Возраст</label>
-            <div class="age-inputs">
-                <input type="date" id="birthDate">
-                <input type="number" id="ageYear" placeholder="Год" min="2009" max="2023">
-                <button id="calcAgeBtn">Определить</button>
-            </div>
+            <label>Город</label>
+            <select id="citySelect">
+                <option value="Находка">Находка</option>
+            </select>
         </div>
         
         <div class="filter-item">
@@ -57,6 +48,14 @@
             </select>
         </div>
         
+        <div class="filter-item">
+            <label>Возраст</label>
+            <div class="age-inputs">
+                <input type="date" id="birthDate">
+                <input type="number" id="ageYear" placeholder="Год" min="2009" max="2023">
+            </div>
+        </div>
+        
         <div class="free-check">
             <label>
                 <input type="checkbox" id="freeOnly"> Бесплатные
@@ -68,6 +67,7 @@
         <button id="searchBtn">Найти</button>
         <button id="resetFiltersBtn" class="reset-filters-btn">Сбросить фильтры</button>
         <button id="toggleMapBtn" class="toggle-map-btn">Показать карту</button>
+        <button id="adminBtn" class="admin-btn">Админ-панель</button>
     </div>
 </div>
 
