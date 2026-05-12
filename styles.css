@@ -4,6 +4,7 @@
     box-sizing: border-box;
 }
 
+/* Основные стили страницы */
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
     background: #f5f5f5;
@@ -15,6 +16,7 @@ body {
     overflow-x: hidden;
 }
 
+/* Шапка сайта */
 .top-bar {
     display: flex;
     justify-content: center;
@@ -24,6 +26,7 @@ body {
     position: relative;
 }
 
+/* Блок с заголовком */
 .title-wrapper {
     text-align: center;
 }
@@ -45,6 +48,7 @@ body {
     line-height: 1.2;
 }
 
+/* Кнопка админ-панели */
 .admin-btn {
     padding: 8px 16px;
     background: #ff9800;
@@ -62,6 +66,7 @@ body {
     background: #f57c00;
 }
 
+/* Блок фильтров */
 .filters-container {
     background: white;
     padding: 16px 20px;
@@ -72,6 +77,7 @@ body {
     flex-shrink: 0;
 }
 
+/* Строка с фильтрами */
 .filter-row {
     display: flex;
     align-items: flex-end;
@@ -100,6 +106,7 @@ body {
     width: 180px;
 }
 
+/* Поля ввода возраста */
 .age-inputs {
     display: flex;
     gap: 10px;
@@ -113,15 +120,7 @@ body {
     width: 130px;
 }
 
-.age-inputs button {
-    padding: 8px 16px;
-    background: #e0e0e0;
-    border: none;
-    border-radius: 4px;
-    font-size: 13px;
-    cursor: pointer;
-}
-
+/* Чекбокс */
 .free-check {
     display: flex;
     align-items: center;
@@ -142,6 +141,7 @@ body {
     cursor: pointer;
 }
 
+/* Кнопки в блоке фильтров */
 .filter-buttons {
     display: flex;
     gap: 15px;
@@ -156,6 +156,7 @@ body {
     cursor: pointer;
 }
 
+/* Цвета кнопок */
 #searchBtn {
     background: #1976d2;
 }
@@ -180,18 +181,7 @@ body {
     background: #b71c1c;
 }
 
-.filter-buttons button:hover {
-    background: #1565c0;
-}
-
-.filter-buttons .toggle-map-btn {
-    background: #757575;
-}
-
-.filter-buttons .toggle-map-btn:hover {
-    background: #616161;
-}
-
+/* Основной контент */
 .main-content {
     display: flex;
     gap: 20px;
@@ -200,6 +190,7 @@ body {
     overflow: hidden;
 }
 
+/* Сетка карточек */
 .results {
     flex: 1;
     display: grid;
@@ -209,12 +200,17 @@ body {
     padding: 5px;
     align-content: start;
     height: 100%;
-    overflow-y: auto;
     overflow-x: hidden;
     scrollbar-width: none;
     -ms-overflow-style: none;
 }
 
+.results::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+}
+
+/* Блок карты */
 .map-container {
     width: 380px;
     flex-shrink: 0;
@@ -222,14 +218,16 @@ body {
     overflow: hidden;
 }
 
+/* Карта */
 .map {
-     width: 100%;
+    width: 100%;
     height: 100%;
     border-radius: 8px;
     border: 1px solid #ddd;
     overflow: hidden;
 }
 
+/* Карточка кружка */
 .card {
     background: white;
     border-radius: 6px;
@@ -247,6 +245,7 @@ body {
     border-color: #1976d2;
 }
 
+/* Заголовок карточки */
 .card-title {
     font-size: 14px;
     font-weight: 600;
@@ -254,6 +253,7 @@ body {
     margin-bottom: 6px;
 }
 
+/* Детали карточки */
 .card-details {
     font-size: 11px;
     color: #777;
@@ -268,6 +268,7 @@ body {
     word-break: break-word;
 }
 
+/* Цена в карточке */
 .card-price {
     margin-top: 6px;
     padding-top: 5px;
@@ -285,94 +286,14 @@ body {
     color: #4caf50;
 }
 
+/* Телефон в карточке */
 .card-phone {
     font-size: 10px;
     color: #aaa;
     margin-top: 4px;
 }
 
-.modal-title {
-    text-align: center;
-    font-size: 18px;
-    margin-bottom: 5px;
-}
-
-.modal-subtitle {
-    text-align: center;
-    font-size: 12px;
-    color: #888;
-    margin-bottom: 10px;
-}
-
-.modal-inputs {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin: 15px 0;
-}
-
-.input-group input, .input-group select {
-    padding: 6px 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 13px;
-    width: 100%;
-}
-
-.modal-btn {
-    padding: 6px 20px;
-    background: #1976d2;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 13px;
-    cursor: pointer;
-}
-
-#loginModal .modal-btn {
-    display: block;
-    margin: 0 auto;
-    width: auto;
-    min-width: 120px;
-}
-
-#loginModal .modal-inputs {
-    margin-top: 10px;
-}
-
-#adminLogin, #adminPassword {
-    padding: 10px 12px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 100%;
-    box-sizing: border-box;
-}
-
-.modal-btn:hover {
-    background: #1565c0;
-}
-
-.modal-delete-btn {
-    padding: 6px 20px;
-    background: #d32f2f;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 13px;
-    cursor: pointer;
-}
-
-.modal-delete-btn:hover {
-    background: #b71c1c;
-}
-
-.modal-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    margin-top: 15px;
-}
-
+/* Карточка для добавления нового кружка */
 .add-card {
     background: white;
     border-radius: 6px;
@@ -403,15 +324,7 @@ body {
     margin-top: 10px;
 }
 
-.close {
-    position: absolute;
-    right: 16px;
-    top: 12px;
-    font-size: 24px;
-    cursor: pointer;
-    color: #999;
-}
-
+/* Модальные окна */
 .modal {
     display: none;
     position: fixed;
@@ -435,6 +348,39 @@ body {
     overflow-y: auto;
 }
 
+/* Кнопка закрытия модального окна */
+.close {
+    position: absolute;
+    right: 16px;
+    top: 12px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #999;
+}
+
+/* Заголовки модальных окон */
+.modal-title {
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 5px;
+}
+
+.modal-subtitle {
+    text-align: center;
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 10px;
+}
+
+/* Поля ввода в модальных окнах */
+.modal-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 15px 0;
+}
+
+/* Группа полей ввода */
 .input-group {
     display: flex;
     flex-direction: column;
@@ -447,6 +393,71 @@ body {
     font-weight: 500;
 }
 
+.input-group input, .input-group select {
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 13px;
+    width: 100%;
+}
+
+/* Кнопки в модальных окнах */
+.modal-btn {
+    padding: 6px 20px;
+    background: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.modal-btn:hover {
+    background: #1565c0;
+}
+
+.modal-delete-btn {
+    padding: 6px 20px;
+    background: #d32f2f;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.modal-delete-btn:hover {
+    background: #b71c1c;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 15px;
+}
+
+/* Стили для окна входа */
+#loginModal .modal-btn {
+    display: block;
+    margin: 0 auto;
+    width: auto;
+    min-width: 120px;
+}
+
+#loginModal .modal-inputs {
+    margin-top: 10px;
+}
+
+#adminLogin, #adminPassword {
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Кнопка выхода из админки */
 .logout-btn {
     position: fixed;
     top: 20px;
@@ -465,6 +476,7 @@ body {
     background: #1565c0;
 }
 
+/* Сообщение "ничего не найдено" */
 .no-results {
     grid-column: 1/-1;
     text-align: center;
@@ -472,14 +484,7 @@ body {
     color: #999;
 }
 
-.reset-filters-btn {
-    background: #d32f2f;
-}
-
-.reset-filters-btn:hover {
-    background: #b71c1c;
-}
-
+/* Режим администратора */
 .admin-mode .main-content {
     display: block;
 }
@@ -488,15 +493,9 @@ body {
     width: 100%;
     height: 100%;
     overflow-y: auto;
-    overflow-y: auto;
     overflow-x: hidden;
     scrollbar-width: none;
     -ms-overflow-style: none;
-}
-
-.results::-webkit-scrollbar {
-    width: 0;
-    background: transparent;
 }
 
 .admin-mode .results::-webkit-scrollbar {
@@ -520,25 +519,28 @@ body {
     margin: 0;
 }
 
+/* Адаптация для больших экранов */
 @media (min-width: 1400px) {
     .map-container {
         width: 450px;
     }
 }
 
+/* Адаптация для ноутбуков */
 @media (max-width: 1200px) {
     .results {
         grid-template-columns: repeat(3, 1fr);
     }
 }
 
+/* Адаптация для маленьких ноутбуков */
 @media (max-width: 900px) {
     .results {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
-/* Телефон */
+/* Адаптация для телефонов */
 @media (max-width: 767px) {
     body {
         padding: 10px;
@@ -550,7 +552,7 @@ body {
         flex-direction: column;
         position: static;
     }
-
+    
     .logout-btn {
         display: none !important;
     }
@@ -597,10 +599,6 @@ body {
         width: 100%;
     }
     
-    .age-inputs button {
-        width: 100%;
-    }
-    
     .filter-buttons {
         flex-direction: column;
         gap: 8px;
@@ -631,13 +629,13 @@ body {
     .card {
         min-height: auto;
     }
-
-     .admin-btn {
+    
+    .admin-btn {
         position: static;
         width: 100%;
         margin-top: 10px;
     }
-
+    
     .admin-mode .logout-btn {
         display: block !important;
         position: fixed;
@@ -646,7 +644,7 @@ body {
         z-index: 1001;
         background: #1976d2;
     }
-
+    
     .modal {
         z-index: 1002;
     }
@@ -656,21 +654,21 @@ body {
     }
 }
 
-/* Планшет */
+/* Адаптация для планшетов */
 @media (min-width: 768px) and (max-width: 1024px) {
-    .admin-mode .top-bar {
-        justify-content: center;
-        position: relative;
-    }
-    
     .top-bar {
         position: relative;
     }
-
+    
     .admin-btn {
         position: absolute;
         right: 20px;
         top: 20px;
+    }
+    
+    .admin-mode .top-bar {
+        justify-content: center;
+        position: relative;
     }
     
     .admin-mode .logout-btn {
@@ -681,21 +679,13 @@ body {
         transform: none;
         display: block;
     }
-
-    .admin-mode .logout-btn {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        left: auto;
-        transform: none;
-    }
     
     .admin-mode .title-wrapper {
         text-align: center;
         width: 100%;
         position: relative;
     }
-
+    
     .admin-mode .title-wrapper h1 {
         text-align: center;
         margin: 0 auto;
@@ -706,4 +696,5 @@ body {
         width: 85%;
         padding: 20px 25px;
     }
+    
 }

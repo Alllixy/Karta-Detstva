@@ -6,6 +6,7 @@ let isAdminMode = false;
 let editingClubId = null;
 let clubsCoordinates = new Map();
 
+// Инициализация карты при загрузке страницы
 function initMap() {
     if (typeof ymaps === 'undefined') {
         document.getElementById('map').innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;">Ошибка загрузки карты</div>';
@@ -20,7 +21,7 @@ function initMap() {
         });
     });
 }
-
+// Показать/скрыть карту
 function toggleMap() {
     const container = document.getElementById('mapContainer');
     const btn = document.getElementById('toggleMapBtn');
@@ -55,7 +56,7 @@ function toggleMap() {
     }
     mapVisible = !mapVisible;
 }
-
+// Загрузка списка городов 
 async function loadCities() {
     const response = await fetch('/api/cities');
     const cities = await response.json();
@@ -65,7 +66,7 @@ async function loadCities() {
     await loadDistricts();
     await loadClubs();
 }
-
+// Загрузка районов для выбранного города
 async function loadDistricts() {
     const city = document.getElementById('citySelect').value;
     if (!city) {
@@ -85,7 +86,7 @@ async function loadDistricts() {
         });
     }
 }
-
+// Загрузка списка городов для модального окна
 async function loadModalCities() {
     const response = await fetch('/api/cities');
     const cities = await response.json();
@@ -98,7 +99,7 @@ async function loadModalCities() {
         citySelect.appendChild(option);
     });
 }
-
+// Загрузка районов в модальном окне
 async function loadModalDistricts() {
     const city = document.getElementById('editClubCity').value;
     if (!city) {
@@ -118,7 +119,7 @@ async function loadModalDistricts() {
         });
     }
 }
-
+// Загрузка кружков с фильтрацией
 async function loadClubs() {
     const city = document.getElementById('citySelect').value;
     const district = document.getElementById('districtFilter').value;
@@ -165,7 +166,7 @@ async function loadClubs() {
         document.getElementById('results').innerHTML = '<div class="no-results">Ошибка загрузки</div>';
     }
 }
-
+// Отображение карточек кружков на странице
 function displayResults(clubs) {
     const resultsDiv = document.getElementById('results');
     
@@ -202,6 +203,9 @@ function displayResults(clubs) {
     } else {
         resultsDiv.innerHTML = clubs.map(club => `
             <div class="card" onclick="showRoute(${club.id})">
+                <div style="width:100%; height:100px; background:#f0f0f0; border-radius:8px; margin-bottom:8px; display:flex; align-items:center; justify-content:center;">
+                    <span style="font-size:24px;">📷</span>
+                </div>
                 <div class="card-title">${club.name}</div>
                 <div class="card-details">
                     <div>${club.address}</div>
@@ -210,16 +214,18 @@ function displayResults(clubs) {
                     <div>${club.schedule}</div>
                 </div>
                 <div class="card-phone">${club.phone}</div>
-                <div class="card-price">
+                <div class="card-price" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div style="font-size:10px; color:#999;">⭐⭐⭐⭐☆ (4 отзыва)</div>
                     <div class="price-value ${club.price === 0 ? 'free' : ''}">
                         ${club.price === 0 ? 'Бесплатно' : club.price + ' руб/мес'}
                     </div>
                 </div>
             </div>
         `).join('');
+        console.log('Отображаются кружки:', clubs);
     }
 }
-
+// Открытие модального окна для добавления кружка
 function openAddModal() {
     editingClubId = null;
     document.getElementById('clubModalTitle').textContent = 'Добавление кружка';
@@ -236,7 +242,7 @@ function openAddModal() {
     document.getElementById('deleteClubBtn').style.display = 'none';
     document.getElementById('clubModal').style.display = 'block';
 }
-
+// Открытие модального окна для редактирования кружка
 async function openEditModal(clubId) {
     const club = currentClubs.find(c => c.id === clubId);
     if (!club) return;
@@ -287,7 +293,7 @@ async function openEditModal(clubId) {
     
     document.getElementById('clubModal').style.display = 'block';
 }
-
+// Сохранение кружка
 async function saveClub() {
     const name = document.getElementById('editClubName').value.trim();
     const address = document.getElementById('editClubAddress').value.trim();
@@ -391,9 +397,24 @@ async function saveClub() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(data)
         });
+        
         if (response.ok) {
+            const savedClub = await response.json();
+            
+            if (editingClubId === null) {
+                currentClubs.push(savedClub);
+            } else {
+                const index = currentClubs.findIndex(c => c.id === editingClubId);
+                if (index !== -1) {
+                    currentClubs[index] = savedClub;
+                }
+            }
+            
+            displayResults(currentClubs);
+            if (mapVisible && map) {
+                displayOnMap(currentClubs);
+            }
             document.getElementById('clubModal').style.display = 'none';
-            loadClubs();
         } else {
             alert('Ошибка сервера при сохранении');
         }
@@ -402,7 +423,7 @@ async function saveClub() {
         alert('Ошибка соединения с сервером');
     }
 }
-
+// Удаление кружка
 async function deleteClub() {
     if (!editingClubId) return;
     
@@ -410,8 +431,12 @@ async function deleteClub() {
         try {
             const response = await fetch(`/api/clubs/${editingClubId}`, { method: 'DELETE' });
             if (response.ok) {
+                currentClubs = currentClubs.filter(c => c.id !== editingClubId);
+                displayResults(currentClubs);
+                if (mapVisible && map) {
+                    displayOnMap(currentClubs);
+                }
                 document.getElementById('clubModal').style.display = 'none';
-                loadClubs();
             } else {
                 alert('Ошибка удаления');
             }
@@ -421,7 +446,7 @@ async function deleteClub() {
         }
     }
 }
-
+// Получение текущего местоположения пользователя
 function getCurrentLocation() {
     return new Promise((resolve, reject) => {
         if (navigator.geolocation) {
@@ -434,7 +459,7 @@ function getCurrentLocation() {
         }
     });
 }
-
+// Построение маршрута
 async function showRoute(clubId) {
     const club = currentClubs.find(c => c.id === clubId);
     if (!club) return;
@@ -461,7 +486,6 @@ async function showRoute(clubId) {
     await waitForMap();
     buildRouteFromAddress(club.address, club.name);
 }
-
 function buildRoute(startCoords, endCoords) {
     ymaps.route([startCoords, endCoords])
         .then(function(route) {
@@ -490,7 +514,6 @@ function buildRoute(startCoords, endCoords) {
             alert('Маршрут не построен');
         });
 }
-
 function buildRouteFromAddress(address, clubName) {
     if (typeof ymaps === 'undefined') {
         alert('Карта не загружена');
@@ -524,7 +547,6 @@ function buildRouteFromAddress(address, clubName) {
             alert('Не удалось найти адрес: ' + fullAddress);
         });
 }
-
 function buildRouteWithCoords(clubCoords) {
     if (currentRoute) {
         map.geoObjects.remove(currentRoute);
@@ -551,7 +573,7 @@ function buildRouteWithCoords(clubCoords) {
         buildRoute(mapCenter, clubCoords);
     }
 }
-
+// Отображение меток на карте
 function displayOnMap(clubs) {
     if (!map) return;
     
@@ -591,8 +613,16 @@ function displayOnMap(clubs) {
         }
     });
 }
-
+// Вход в режим администратора
 function enterAdminMode() {
+    document.getElementById('birthDate').value = '';
+    document.getElementById('ageYear').value = '';
+    document.getElementById('districtFilter').innerHTML = '<option value=""></option>';
+    document.getElementById('typeFilter').value = '';
+    document.getElementById('freeOnly').checked = false;
+    document.getElementById('citySelect').value = 'Находка';
+    loadDistricts();
+
     isAdminMode = true;
     document.getElementById('logoutBtn').style.display = 'block';
     document.getElementById('adminBtn').style.display = 'none';
@@ -608,7 +638,7 @@ function enterAdminMode() {
     
     loadClubs();
 }
-
+// Выход из режима администратор
 function exitAdminMode() {
     isAdminMode = false;
     document.getElementById('logoutBtn').style.display = 'none';
@@ -619,7 +649,7 @@ function exitAdminMode() {
     document.body.classList.remove('admin-mode');
     loadClubs();
 }
-
+// Запуск всех функций после загрузки страницы
 document.addEventListener('DOMContentLoaded', () => {
     initMap();
     loadCities();
@@ -630,9 +660,6 @@ document.addEventListener('DOMContentLoaded', () => {
         loadDistricts();
         loadClubs();
     });
-    document.getElementById('districtFilter').addEventListener('change', loadClubs);
-    document.getElementById('typeFilter').addEventListener('change', loadClubs);
-    document.getElementById('freeOnly').addEventListener('change', loadClubs);
     
     document.getElementById('resetFiltersBtn').addEventListener('click', () => {
         document.getElementById('birthDate').value = '';
@@ -688,4 +715,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('saveClubBtn').onclick = saveClub;
     document.getElementById('deleteClubBtn').onclick = deleteClub;
     document.getElementById('editClubCity').addEventListener('change', loadModalDistricts);
+
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js').catch(console.log);
+    }
 });

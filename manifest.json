@@ -1,0 +1,10 @@
+{
+  "name": "Карта детства",
+  "short_name": "Карта детства",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#ff9800",
+  "background_color": "#ffffff"
+}
+
+
