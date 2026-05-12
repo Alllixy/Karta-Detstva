@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
   "name": "Карта детства",
   "short_name": "Карта детства",
@@ -8,3 +9,13 @@
 }
 
 
+=======
+{
+  "name": "Карта детства",
+  "short_name": "Карта детства",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#ff9800",
+  "background_color": "#ffffff"
+}
+>>>>>>> 3284730a6b3dd3d05b2ecf6ee1e0da599e5065df

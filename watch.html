@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -225,4 +226,233 @@
         loadNearbyClubs();
     </script>
 </body>
+=======
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Карта детства - Smart-часы</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        /* Основные стили */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: white;
+            color: #333;
+            padding: 8px;
+            min-height: 100vh;
+        }
+        
+        /* Шапка */
+        .header {
+            text-align: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 12px;
+        }
+        
+        .header h1 {
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        .header p {
+            font-size: 10px;
+            color: #888;
+            margin-top: 4px;
+        }
+        
+        /* Список кружков */
+        .clubs-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        /* Карточка кружка */
+        .club-card {
+            background: #f5f5f5;
+            border-radius: 10px;
+            padding: 10px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        /* Название */
+        .club-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #ff9800;
+            margin-bottom: 6px;
+        }
+        
+        /* Адрес */
+        .club-address {
+            font-size: 10px;
+            color: #666;
+            margin-bottom: 6px;
+        }
+        
+        /* Расписание */
+        .club-schedule {
+            font-size: 10px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        /* Цена */
+        .club-price {
+            font-size: 11px;
+            font-weight: 600;
+            color: #4caf50;
+            margin-bottom: 8px;
+        }
+        
+        /* Кнопка звонка */
+        .call-btn {
+            background: #1976d2;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            width: 100%;
+            cursor: pointer;
+        }
+        
+        .call-btn:hover {
+            background: #1565c0;
+        }
+        
+        /* Сообщение если нет данных */
+        .no-results {
+            text-align: center;
+            padding: 20px;
+            color: #888;
+            font-size: 12px;
+        }
+        
+        /* Информация о местоположении */
+        .location-info {
+            text-align: center;
+            font-size: 9px;
+            color: #ccc;
+            margin-top: 12px;
+            padding-top: 8px;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <!-- Шапка -->
+    <div class="header">
+        <h1>Карта детства</h1>
+    </div>
+    
+    <!-- Список кружков -->
+    <div id="results" class="clubs-list">
+        <div class="no-results">Загрузка...</div>
+    </div>
+    
+    <!-- Информация о геолокации -->
+    <div id="locationInfo" class="location-info"></div>
+
+    <script>
+        // Хранилище кружков
+        let currentClubs = [];
+        
+        // Загрузка кружков с сервера
+        async function loadNearbyClubs() {
+            try {
+                const response = await fetch('/api/clubs?city=Находка');
+                const clubs = await response.json();
+                // Берем первые 3 кружка
+                currentClubs = clubs.slice(0, 3);
+                displayResults(currentClubs);
+                getLocationAndSort();
+            } catch (error) {
+                document.getElementById('results').innerHTML = '<div class="no-results">Ошибка загрузки</div>';
+            }
+        }
+        
+        // Отображение карточек
+        function displayResults(clubs) {
+            const resultsDiv = document.getElementById('results');
+            
+            if (clubs.length === 0) {
+                resultsDiv.innerHTML = '<div class="no-results">Нет доступных кружков</div>';
+                return;
+            }
+            
+            resultsDiv.innerHTML = clubs.map(club => `
+                <div class="club-card">
+                    <div class="club-name">${club.name}</div>
+                    <div class="club-address">${club.address}</div>
+                    <div class="club-schedule">${club.schedule}</div>
+                    <div class="club-price">${club.price === 0 ? 'Бесплатно' : club.price + ' руб/мес'}</div>
+                    <button class="call-btn" onclick="makeCall('${club.phone}')">📞 Позвонить</button>
+                </div>
+            `).join('');
+        }
+        
+        // Совершить звонок
+        function makeCall(phone) {
+            window.location.href = `tel:${phone}`;
+        }
+        
+        // Получаем геолокацию и сортируем кружки
+        function getLocationAndSort() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        const userLat = position.coords.latitude;
+                        const userLon = position.coords.longitude;
+                        document.getElementById('locationInfo').innerHTML = `Ваше местоположение определено`;
+                        sortByDistance(userLat, userLon);
+                    },
+                    function(error) {
+                        document.getElementById('locationInfo').innerHTML = `Местоположение не определено`;
+                        displayResults(currentClubs);
+                    }
+                );
+            } else {
+                document.getElementById('locationInfo').innerHTML = `Геолокация не поддерживается`;
+                displayResults(currentClubs);
+            }
+        }
+        
+        // Сортировка по расстоянию до пользователя
+        async function sortByDistance(userLat, userLon) {
+            const clubsWithDistance = [];
+            
+            for (const club of currentClubs) {
+                const fullAddress = `${club.city}, ${club.address}`;
+                const response = await fetch(`https://geocode-maps.yandex.ru/1.x/?apikey=b04baac4-ee7e-499f-affc-c3c2442bb895&geocode=${encodeURIComponent(fullAddress)}&format=json`);
+                const data = await response.json();
+                const pos = data.response.GeoObjectCollection.featureMember[0]?.geoObject.Point.pos;
+                
+                if (pos) {
+                    const [lon, lat] = pos.split(' ');
+                    const distance = Math.sqrt(Math.pow(userLat - lat, 2) + Math.pow(userLon - lon, 2));
+                    clubsWithDistance.push({ ...club, distance });
+                } else {
+                    clubsWithDistance.push({ ...club, distance: Infinity });
+                }
+            }
+            
+            clubsWithDistance.sort((a, b) => a.distance - b.distance);
+            displayResults(clubsWithDistance.slice(0, 3));
+        }
+        
+        // Запуск
+        loadNearbyClubs();
+    </script>
+</body>
+>>>>>>> 3284730a6b3dd3d05b2ecf6ee1e0da599e5065df
 </html>

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -180,4 +181,188 @@
 
 <script src="script.js"></script>
 </body>
+=======
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Карта детства</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=b04baac4-ee7e-499f-affc-c3c2442bb895&lang=ru_RU"></script>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#ff9800">
+</head>
+<body>
+
+<!-- Шапка сайта -->
+<div class="top-bar">
+    <div class="title-wrapper">
+        <h1 id="mainTitle">Карта детства</h1>
+        <p id="mainSubtitle" class="subtitle">Найти кружок для ребенка</p>
+    </div>
+</div>
+
+<!-- Блок с фильтрами -->
+<div id="filtersContainer" class="filters-container">
+    <div class="filter-row">
+        <!-- Выбор города -->
+        <div class="filter-item">
+            <label>Город</label>
+            <select id="citySelect">
+                <option value="Находка">Находка</option>
+            </select>
+        </div>
+        
+         <!-- Выбор района -->
+        <div class="filter-item">
+            <label>Район</label>
+            <select id="districtFilter">
+                <option value=""></option>
+            </select>
+        </div>
+        
+        <!-- Выбор типа активности -->
+        <div class="filter-item">
+            <label>Активность</label>
+            <select id="typeFilter">
+                <option value=""></option>
+                <option value="робототехника">Робототехника</option>
+                <option value="программирование">Программирование</option>
+                <option value="рисование">Рисование</option>
+                <option value="танцы">Танцы</option>
+                <option value="спорт">Спорт</option>
+                <option value="музыка">Музыка</option>
+                <option value="английский">Английский</option>
+                <option value="шахматы">Шахматы</option>
+                <option value="театр">Театр</option>
+                <option value="рукоделие">Рукоделие</option>
+            </select>
+        </div>
+        
+        <!-- Ввод возраста -->
+        <div class="filter-item">
+            <label>Возраст</label>
+            <div class="age-inputs">
+                <input type="date" id="birthDate">
+                <input type="number" id="ageYear" placeholder="Год" min="2009" max="2023">
+            </div>
+        </div>
+        
+        <!-- Чекбокс -->
+        <div class="free-check">
+            <label>
+                <input type="checkbox" id="freeOnly"> Бесплатные
+            </label>
+        </div>
+    </div>
+    
+    <!-- Кнопки  -->
+    <div class="filter-buttons">
+        <button id="searchBtn">Найти</button>
+        <button id="resetFiltersBtn" class="reset-filters-btn">Сбросить фильтры</button>
+        <button id="toggleMapBtn" class="toggle-map-btn">Показать карту</button>
+        <button id="adminBtn" class="admin-btn">Админ-панель</button>
+    </div>
+</div>
+
+<!-- Окно входа в админ панель -->
+<div id="loginModal" class="modal">
+    <div class="modal-content">
+        <span class="close close-modal">&times;</span>
+        <h3 class="modal-title">Админ-панель</h3>
+        <p class="modal-subtitle">Вход в систему</p>
+        <div class="modal-inputs">
+            <input type="text" id="adminLogin" placeholder="Логин">
+            <input type="password" id="adminPassword" placeholder="Пароль">
+        </div>
+        <button id="loginBtn" class="modal-btn">Войти</button>
+    </div>
+</div>
+
+<!-- Окно добавления кружка -->
+<div id="clubModal" class="modal">
+    <div class="modal-content">
+        <span class="close close-modal">&times;</span>
+        <h3 class="modal-title" id="clubModalTitle">Добавление кружка</h3>
+        <div class="modal-inputs">
+            <div class="input-group">
+                <label>Название</label>
+                <input type="text" id="editClubName">
+            </div>
+            <div class="input-group">
+                <label>Адрес</label>
+                <input type="text" id="editClubAddress">
+            </div>
+            <div class="input-group">
+                <label>Город</label>
+                <select id="editClubCity">
+                    <option value="">Выберите город</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Район</label>
+                <select id="editClubDistrict">
+                    <option value="">Выберите район</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Возраст от</label>
+                <input type="number" id="editClubAgeFrom">
+            </div>
+            <div class="input-group">
+                <label>Возраст до</label>
+                <input type="number" id="editClubAgeTo">
+            </div>
+            <div class="input-group">
+                <label>Цена (0-бесплатно)</label>
+                <input type="number" id="editClubPrice">
+            </div>
+            <div class="input-group">
+                <label>Тип</label>
+                <select id="editClubType">
+                    <option value="">Выберите тип кружка</option>
+                    <option value="робототехника">Робототехника</option>
+                    <option value="программирование">Программирование</option>
+                    <option value="рисование">Рисование</option>
+                    <option value="танцы">Танцы</option>
+                    <option value="спорт">Спорт</option>
+                    <option value="музыка">Музыка</option>
+                    <option value="английский">Английский</option>
+                    <option value="шахматы">Шахматы</option>
+                    <option value="театр">Театр</option>
+                    <option value="рукоделие">Рукоделие</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>Телефон</label>
+                <input type="tel" id="editClubPhone">
+            </div>
+            <div class="input-group">
+                <label>Расписание</label>
+                <input type="text" id="editClubSchedule">
+            </div>
+        </div>
+        <div class="modal-buttons">
+            <button id="saveClubBtn" class="modal-btn">Сохранить</button>
+            <button id="deleteClubBtn" class="modal-delete-btn" style="display: none;">Удалить</button>
+        </div>
+    </div>
+</div>
+
+<div class="main-content" id="mainContent">
+    <!-- Карточки кружков -->
+    <div id="results" class="results"></div>
+    <!-- Карта -->
+    <div id="mapContainer" class="map-container" style="display: none;">
+        <div id="map" class="map"></div>
+    </div>
+</div>
+
+<!-- Кнопка выхода из админ панели -->
+<button id="logoutBtn" class="logout-btn" style="display: none;">Выйти</button>
+
+<script src="script.js"></script>
+</body>
+>>>>>>> 3284730a6b3dd3d05b2ecf6ee1e0da599e5065df
 </html>

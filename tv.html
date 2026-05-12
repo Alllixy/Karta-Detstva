@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -312,4 +313,320 @@
         loadTopClubs();
     </script>
 </body>
+=======
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Карта детства - Smart TV</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+        
+        /* Основные стили */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            padding: 40px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        /* Шапка */
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .header h1 {
+            font-size: 56px;
+            font-weight: 600;
+            color: white;
+        }
+        
+        .header p {
+            font-size: 24px;
+            color: #ccc;
+            margin-top: 15px;
+        }
+        
+        /* Сетка карточек */
+        .clubs-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 30px;
+            max-width: 1800px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        /* Карточка кружка */
+        .club-card {
+            background: rgba(255,255,255,0.1);
+            border-radius: 24px;
+            padding: 25px 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            min-height: 320px;
+        }
+        
+        /* Выделенная карточка */
+        .club-card.focused {
+            transform: scale(1.02);
+            background: rgba(255, 255, 255, 0.137);
+            box-shadow: 0 0 40px rgba(255, 230, 199, 0.5);
+        }
+        
+        /* Эффект при наведении */
+        .club-card:hover {
+            transform: scale(1.02);
+        }
+        
+        /* Блок с иконкой */
+        .club-image {
+            width: 100%;
+            height: 140px;
+            background: white;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .club-image span {
+            font-size: 64px;
+        }
+        
+        /* Название */
+        .club-name {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            text-align: center;
+            color: white;
+        }
+        
+        /* Детали */
+        .club-details {
+            font-size: 14px;
+            color: #ccc;
+            text-align: center;
+            margin-bottom: 6px;
+        }
+        
+        /* Цена */
+        .club-price {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ff9800;
+            text-align: center;
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .price-free {
+            color: #4caf50;
+        }
+        
+        /* Сообщение если нет данных */
+        .no-results {
+            grid-column: 1/-1;
+            text-align: center;
+            padding: 60px;
+            font-size: 28px;
+            color: #888;
+        }
+        
+        /* Адаптация для разных размеров */
+        @media (max-width: 1600px) {
+            .clubs-grid {
+                gap: 25px;
+            }
+            .club-name {
+                font-size: 18px;
+            }
+            .club-image span {
+                font-size: 52px;
+            }
+            .club-image {
+                height: 120px;
+            }
+            .club-card {
+                min-height: 280px;
+            }
+        }
+        
+        @media (max-width: 1200px) {
+            .clubs-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        
+        @media (max-width: 900px) {
+            .clubs-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Шапка -->
+    <div class="header">
+        <h1>Карта детства</h1>
+        <p>Топ-10 кружков в городе</p>
+    </div>
+    
+    <!-- Сетка карточек -->
+    <div id="results" class="clubs-grid">
+        <div class="no-results">Загрузка...</div>
+    </div>
+
+    <script>
+        // Хранилище кружков и индекс выбранного
+        let currentClubs = [];
+        let currentFocus = 0;
+        
+        // Загрузка топ-10 кружков
+        async function loadTopClubs() {
+            try {
+                const response = await fetch('/api/clubs?city=Находка');
+                const clubs = await response.json();
+                // Берем первые 10 кружков
+                currentClubs = clubs.slice(0, 10);
+                displayResults(currentClubs);
+                addFocusHandlers();
+            } catch (error) {
+                document.getElementById('results').innerHTML = '<div class="no-results">Ошибка загрузки</div>';
+            }
+        }
+        
+        // Отображение карточек
+        function displayResults(clubs) {
+            const resultsDiv = document.getElementById('results');
+            
+            if (clubs.length === 0) {
+                resultsDiv.innerHTML = '<div class="no-results">Нет доступных кружков</div>';
+                return;
+            }
+            
+            resultsDiv.innerHTML = clubs.map((club, index) => `
+                <div class="club-card" data-index="${index}">
+                    <div class="club-image">
+                        <span>⭐</span>
+                    </div>
+                    <div class="club-name">${club.name}</div>
+                    <div class="club-details">${club.district}</div>
+                    <div class="club-details">${club.age_from}-${club.age_to} лет</div>
+                    <div class="club-details">${club.schedule}</div>
+                    <div class="club-price ${club.price === 0 ? 'price-free' : ''}">${club.price === 0 ? 'Бесплатно' : club.price + ' ₽'}</div>
+                </div>
+            `).join('');
+        }
+        
+        // Добавление обработчиков для навигации пультом
+        function addFocusHandlers() {
+            const cards = document.querySelectorAll('.club-card');
+            if (cards.length === 0) return;
+            
+            cards.forEach((card, index) => {
+                card.setAttribute('tabindex', '0');
+                
+                card.addEventListener('click', () => {
+                    selectClub(index);
+                });
+            });
+            
+            currentFocus = 0;
+            updateFocus();
+        }
+        
+        // Обновление выделенной карточки
+        function updateFocus() {
+            const cards = document.querySelectorAll('.club-card');
+            cards.forEach((card, index) => {
+                if (index === currentFocus) {
+                    card.classList.add('focused');
+                    card.focus();
+                } else {
+                    card.classList.remove('focused');
+                }
+            });
+            
+            const focusedCard = cards[currentFocus];
+            if (focusedCard) {
+                focusedCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+        }
+        
+        // Выбор кружка
+        function selectClub(index) {
+            const club = currentClubs[index];
+            if (club) {
+                alert(`${club.name}\n\nАдрес: ${club.address}\nТелефон: ${club.phone}\nРасписание: ${club.schedule}\nЦена: ${club.price === 0 ? 'Бесплатно' : club.price + ' руб/мес'}`);
+            }
+        }
+        
+        // Навигация стрелками
+        function navigate(direction) {
+            const cards = document.querySelectorAll('.club-card');
+            const cols = 5;
+            
+            if (direction === 'right') {
+                if (currentFocus + 1 < cards.length) currentFocus++;
+            } else if (direction === 'left') {
+                if (currentFocus - 1 >= 0) currentFocus--;
+            } else if (direction === 'down') {
+                if (currentFocus + cols < cards.length) currentFocus += cols;
+            } else if (direction === 'up') {
+                if (currentFocus - cols >= 0) currentFocus -= cols;
+            }
+            
+            updateFocus();
+        }
+        
+        // Обработка нажатий клавиш
+        document.addEventListener('keydown', (e) => {
+            switch(e.key) {
+                case 'ArrowRight':
+                    e.preventDefault();
+                    navigate('right');
+                    break;
+                case 'ArrowLeft':
+                    e.preventDefault();
+                    navigate('left');
+                    break;
+                case 'ArrowDown':
+                    e.preventDefault();
+                    navigate('down');
+                    break;
+                case 'ArrowUp':
+                    e.preventDefault();
+                    navigate('up');
+                    break;
+                case 'Enter':
+                    e.preventDefault();
+                    selectClub(currentFocus);
+                    break;
+            }
+        });
+        
+        // Запуск
+        loadTopClubs();
+    </script>
+</body>
+>>>>>>> 3284730a6b3dd3d05b2ecf6ee1e0da599e5065df
 </html>
