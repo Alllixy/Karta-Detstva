@@ -29,3 +29,12 @@ Jest
 
 Тестирование
 Для запуска unit-тестов используется Jest (npm test)
+
+API
+GET /api/cities — список городов
+GET /api/clubs — список кружков 
+GET /api/districts?city=Название — районы города
+POST /api/admin/login — вход в админ-панель
+POST /api/clubs — добавить кружок
+PUT /api/clubs/:id — редактировать кружок 
+DELETE /api/clubs/:id — удалить кружок 
